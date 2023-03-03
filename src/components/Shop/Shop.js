@@ -9,7 +9,17 @@ import './Shop.css';
 const Shop = () => {
     const [products, setProducts] = useProducts();
     const [cart, setCart] = useState([]);
-
+    // for pagination
+    const [pageCount,setPageCount] = useState(0);
+    useEffect(()=>{
+        fetch("http://localhost:5000/productcount")
+        .then(res => res.json())
+        .then(data => {
+             const count = data.count;
+             const pages = Math.ceil(count/10);
+             setPageCount(pages);
+        })
+    },[])
     useEffect( () =>{
         const storedCart = getStoredCart();
         const savedCart = [];
@@ -51,8 +61,18 @@ const Shop = () => {
                         product={product}
                         handleAddToCart={handleAddToCart}
                         ></Product>)
+                        
                 }
+                <div className='pagination'>
+                  {
+                     [...Array(pageCount).keys()]
+                     .map(number => <button
+                     >{number + 1}</button>)
+                  }
+                </div>
+             
             </div>
+           
             <div className="cart-container">
                 <Cart cart={cart}>
                     <Link to="/orders"><br />
@@ -60,6 +80,13 @@ const Shop = () => {
                     </Link>
                 </Cart>
             </div>
+            {/* <div className='pagination'>
+                    {
+                        [...Array(pageCount).keys()]
+                        .map(number => <button
+                        >{number + 1}</button>)
+                    }
+            </div> */}
         </div>
     );
 };
