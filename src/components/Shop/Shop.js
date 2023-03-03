@@ -7,10 +7,20 @@ import Product from '../Product/Product';
 import './Shop.css';
 
 const Shop = () => {
-    const [products, setProducts] = useProducts();
     const [cart, setCart] = useState([]);
     // for pagination
     const [pageCount,setPageCount] = useState(0);
+    const [page,setPage] = useState(0);
+    const [size,setSize] = useState(10);
+    const [products, setProducts] = useState([]);
+
+    useEffect( () =>{
+        fetch(`http://localhost:5000/product?page=${page}&size${size}`)
+        // fetch('products.json')
+        .then(res => res.json())
+        .then(data => setProducts(data));
+    }, []);
+
     useEffect(()=>{
         fetch("http://localhost:5000/productcount")
         .then(res => res.json())
@@ -67,8 +77,16 @@ const Shop = () => {
                   {
                      [...Array(pageCount).keys()]
                      .map(number => <button
+                     className={page===number? "selected":''}
+                     onClick={()=>setPage(number)}
                      >{number + 1}</button>)
                   }
+                  <select onChange={e=>setSize(e.target.value)} value='10' name="" id="">
+                        <option value="5">5</option>
+                        <option value="10"selected>10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                  </select>
                 </div>
              
             </div>
@@ -76,17 +94,10 @@ const Shop = () => {
             <div className="cart-container">
                 <Cart cart={cart}>
                     <Link to="/orders"><br />
-                        <button style={{fontSize:'16px'}}>Review Order </button>
+                        <button style={{fontSize:'16px'}}> Review Order </button>
                     </Link>
                 </Cart>
             </div>
-            {/* <div className='pagination'>
-                    {
-                        [...Array(pageCount).keys()]
-                        .map(number => <button
-                        >{number + 1}</button>)
-                    }
-            </div> */}
         </div>
     );
 };
