@@ -15,11 +15,11 @@ const Shop = () => {
     const [products, setProducts] = useState([]);
 
     useEffect( () =>{
-        fetch(`http://localhost:5000/product?page=${page}&size${size}`)
+        fetch(`http://localhost:5000/product?page=${page}&size=${size}`)
         // fetch('products.json')
         .then(res => res.json())
         .then(data => setProducts(data));
-    }, []);
+    }, [page, size]);
 
     useEffect(()=>{
         fetch("http://localhost:5000/productcount")
@@ -81,7 +81,7 @@ const Shop = () => {
                      onClick={()=>setPage(number)}
                      >{number + 1}</button>)
                   }
-                  <select onChange={e=>setSize(e.target.value)} value='10' name="" id="">
+                  <select onChange={e=>setSize(e.target.value)} name="" id="">
                         <option value="5">5</option>
                         <option value="10"selected>10</option>
                         <option value="15">15</option>
