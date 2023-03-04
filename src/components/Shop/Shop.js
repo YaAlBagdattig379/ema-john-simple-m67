@@ -67,7 +67,7 @@ const Shop = () => {
                      .map(number => <button
                      className={page===number? "selected":''}
                      onClick={()=>setPage(number)}
-                     >{number}</button>)
+                     >{number + 1}</button>)
                   }
                   <select onChange={e=>setSize(e.target.value)} name="" id="">
                         <option value="5">5</option>
